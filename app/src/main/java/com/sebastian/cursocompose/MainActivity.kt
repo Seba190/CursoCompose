@@ -12,7 +12,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -80,6 +83,22 @@ fun Login(){
             Text(text = "Iniciar Sesión")
         }
         Text(text = res, modifier = Modifier.fillMaxWidth())
+        LinearProgressIndicator(
+        progress = { 0.55f },
+        modifier = Modifier.fillMaxWidth()
+                    .padding(10.dp),
+        color = ProgressIndicatorDefaults.linearColor,
+        trackColor = ProgressIndicatorDefaults.linearTrackColor,
+        strokeCap = ProgressIndicatorDefaults.LinearStrokeCap,
+        )
+        CircularProgressIndicator(
+        progress = { 0.9f },
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 150.dp, vertical = 10.dp),
+        color = ProgressIndicatorDefaults.circularColor,
+        strokeWidth = ProgressIndicatorDefaults.CircularStrokeWidth,
+        trackColor = ProgressIndicatorDefaults.circularIndeterminateTrackColor,
+        strokeCap = ProgressIndicatorDefaults.CircularDeterminateStrokeCap,
+        )
 
     }
 }
