@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DividerDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.ProgressIndicatorDefaults
@@ -48,9 +50,12 @@ class MainActivity : ComponentActivity() {
               verticalArrangement = Arrangement.Center,
           horizontalAlignment = Alignment.CenterHorizontally) {
               Text(text= "Hola!")
-              Divider(color = Color.Black,
-                 // modifier = Modifier.fillMaxHeight().width(10.dp))
-                  modifier = Modifier.fillMaxWidth().height(10.dp))
+              HorizontalDivider(
+                  modifier = Modifier.fillMaxWidth().height(10.dp),
+                  thickness = DividerDefaults.Thickness,
+                  color = Color.Black
+                  // modifier = Modifier.fillMaxHeight().width(10.dp))
+              )
               Text(text = "Mundo!")
           }
         }
