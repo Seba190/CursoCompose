@@ -5,11 +5,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,38 +30,45 @@ import androidx.compose.ui.unit.sp
 import com.sebastian.cursocompose.ui.theme.CursoComposeTheme
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            CursoComposeTheme {
-                Box(modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center){
-                    SelectorNumerico()
+            Column(modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally)   {
+                val openDialog = remember {mutableStateOf(false)}
+                Button(onClick = {
+                    openDialog.value = true
+                }) {
+                    Text(text = "Abrir Alert Dialog!")
+
                 }
+                if(openDialog.value) {
+                    AlertDialog(
+                        onDismissRequest = {
+                            openDialog.value = false
+                        },
+                        title = {
+                            Text(text = "Alert Dialog de prueba!")
+                        },
+                        text = {
+                            Text("Este es un AD de prueba!")
+                        },
+                        confirmButton = {
+                            Button(onClick = {openDialog.value = false }
+                    ) {
+                         Text(text = "Confirmar!")
+                    }
+                },
+                        dismissButton = {
+                            Button(onClick = { openDialog.value = false }) {
+                                Text(text = "Cancelar!")
+                            }
+                            } )
+                    }
                 }
-
-        }
-    }
-}
-
-@Composable
-fun SelectorNumerico(){
-    var valorActual by remember{ mutableIntStateOf(0) }
-    BotonesSelector(valorActual=valorActual, presiona = {
-        valorActual += it
-    })
-}
-
-@Composable
-fun BotonesSelector(valorActual: Int, presiona: (Int) -> Unit){
-    Column {
-        Button(onClick = {presiona(-1)}) {
-            Text(text = "Restar!")
-        }
-        Text(text = "$valorActual", modifier = Modifier.padding(start = 35.dp),fontSize = 30.sp)
-        Button(onClick = {presiona(+1)}) {
-            Text(text = "Sumar!")
-        }
+            }
     }
 }
