@@ -6,6 +6,8 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -39,6 +42,7 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -49,6 +53,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -62,27 +67,30 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            LazyColumn() {
-                item {
-                    TarjetaBasica()
-                }
-                item {
-                    TarjetaBasica()
-                }
-                item {
-                    TarjetaBasica()
-                }
-                item {
-                    TarjetaBasica()
-                }
-                item {
-                    TarjetaBasica()
-                }
-
-
-            }
+         AnimableEjemplo()
         }
     }
+
+@Composable
+fun AnimableEjemplo(){
+    var isAnimated by remember { mutableStateOf(false) }
+    val color = remember { Animatable(Color.DarkGray) }
+
+    LaunchedEffect(isAnimated) {
+        color.animateTo(if(isAnimated) Color.Green else Color.Red,
+            animationSpec = tween(3000))
+    }
+
+    Box(Modifier
+        .fillMaxWidth()
+        .fillMaxHeight()
+        .background(color.value)){
+        Button(onClick = {isAnimated = !isAnimated}, modifier = Modifier.padding(10.dp)) {
+             Text("Animar el color!")
+        }
+    }
+
+}
 
     @Composable
     fun TarjetaBasica() {
