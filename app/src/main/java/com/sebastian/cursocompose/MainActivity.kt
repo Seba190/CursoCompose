@@ -14,9 +14,11 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,38 +39,18 @@ class MainActivity : ComponentActivity() {
         setContent {
             Column(modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally)   {
-                val openDialog = remember {mutableStateOf(false)}
-                Button(onClick = {
-                    openDialog.value = true
-                }) {
-                    Text(text = "Abrir Alert Dialog!")
-
-                }
-                if(openDialog.value) {
-                    AlertDialog(
-                        onDismissRequest = {
-                            openDialog.value = false
-                        },
-                        title = {
-                            Text(text = "Alert Dialog de prueba!")
-                        },
-                        text = {
-                            Text("Este es un AD de prueba!")
-                        },
-                        confirmButton = {
-                            Button(onClick = {openDialog.value = false }
-                    ) {
-                         Text(text = "Confirmar!")
-                    }
-                },
-                        dismissButton = {
-                            Button(onClick = { openDialog.value = false }) {
-                                Text(text = "Cancelar!")
-                            }
-                            } )
-                    }
-                }
+                horizontalAlignment = Alignment.CenterHorizontally) {
+                SimpleSlider()
             }
+       }
     }
 }
+
+@Composable
+fun SimpleSlider(){
+    var selection by remember { mutableFloatStateOf(50f) }
+    Slider(value = selection,
+        valueRange = 0f..100f,
+        onValueChange = {selection = it})
+}
+
