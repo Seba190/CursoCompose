@@ -6,22 +6,38 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -31,7 +47,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -44,55 +62,150 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-          TextoConSlider()
-            MenuTareas()
-       }
-    }
-}
+            LazyColumn() {
+                item {
+                    TarjetaBasica()
+                }
+                item {
+                    TarjetaBasica()
+                }
+                item {
+                    TarjetaBasica()
+                }
+                item {
+                    TarjetaBasica()
+                }
+                item {
+                    TarjetaBasica()
+                }
 
-@Composable
-fun TextoConSlider(){
-    var fontSize by remember { mutableFloatStateOf(30f) }
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Box(contentAlignment = Alignment.Center ,modifier = Modifier.height(100.dp) ){
-            Text(text = "Sebastián", fontSize = fontSize.sp)
+            }
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Slider(value = fontSize,
-                valueRange = 25f..100f,
-                onValueChange = {fontSize = it},
-                modifier = Modifier
-                    .weight(0.9f)
-                    .padding(end = 16.dp)
+    }
+
+    @Composable
+    fun TarjetaBasica() {
+        Card() {
+            Column(modifier = Modifier.padding(8.dp)) {
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(72.dp)
+                        .padding(start = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .background(color = Color.LightGray, shape = CircleShape)
+                            .size(40.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        //Miniatura
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                            contentDescription = null
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(32.dp))
+                    Column(Modifier.fillMaxWidth()) {
+                        //Titulo
+                        Text(text = "SebaAV", style = MaterialTheme.typography.titleLarge)
+                        //Subtitulo
+                        Text(text = "Canal de Youtube", style = MaterialTheme.typography.bodySmall)
+
+                    }
+                }
+                //Multimedia
+                Image(
+                    painter = painterResource(id = R.drawable.ic_launcher_background),
+                    contentDescription = "Multimedia de la tarjeta",
+                    modifier = Modifier
+                        .background(color = Color.LightGray)
+                        .fillMaxWidth()
+                        .height(194.dp)
                 )
-            Text(text = fontSize.toInt().toString(),
-                modifier = Modifier.weight(0.1f))
+                Row(Modifier.padding(all = 18.dp)) {
+                    Text(
+                        text = "Soy Sebastián Alexis Valenzuela Henríquez, esto es un gran texto",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+                Spacer(modifier = Modifier.height(24.dp))
+                Box(
+                    Modifier.padding(horizontal = 8.dp)
+                        .fillMaxWidth()
+                ) {
+                    Row(modifier = Modifier.align(Alignment.BottomStart)) {
+                        TextButton(onClick = {}) {
+                            Text(text = "Acción 1")
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TextButton(onClick = {}) {
+                            Text(text = "Acción 2")
+                        }
+                    }
+                    Row(modifier = Modifier.align(Alignment.CenterEnd)) {
+                        IconButton(onClick = {}) {
+                            Icon(Icons.Default.Favorite, contentDescription = null)
+                        }
+                        IconButton(onClick = {}) {
+                            Icon(Icons.Default.Share, contentDescription = null)
+                        }
+                    }
+                }
+            }
         }
     }
 
-}
+    @Composable
+    fun TextoConSlider() {
+        var fontSize by remember { mutableFloatStateOf(30f) }
 
-@Composable
-fun MenuTareas(){
-    val context = LocalContext.current
-    var expanded by remember {mutableStateOf(false)}
-    val options = listOf("Bañarse", "Desayunar", "Trabajar", "Descansar", "Divertirse")
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.height(100.dp)) {
+                Text(text = "Sebastián", fontSize = fontSize.sp)
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Slider(
+                    value = fontSize,
+                    valueRange = 25f..100f,
+                    onValueChange = { fontSize = it },
+                    modifier = Modifier
+                        .weight(0.9f)
+                        .padding(end = 16.dp)
+                )
+                Text(
+                    text = fontSize.toInt().toString(),
+                    modifier = Modifier.weight(0.1f)
+                )
+            }
+        }
 
-    Button(onClick = {expanded =! expanded}){
-        Text(text = "Selecciona una tarea" )
     }
-    DropdownMenu(
-        expanded = true,
-        onDismissRequest = {expanded = false}
-    ) {
-        options.forEach { option ->
-            DropdownMenuItem(
-                text = { Text(text = option) },
-                onClick = {
-                    Toast.makeText(context, option, Toast.LENGTH_SHORT).show()
-                } )}
+
+    @Composable
+    fun MenuTareas() {
+        val context = LocalContext.current
+        var expanded by remember { mutableStateOf(false) }
+        val options = listOf("Bañarse", "Desayunar", "Trabajar", "Descansar", "Divertirse")
+
+        Button(onClick = { expanded = !expanded }) {
+            Text(text = "Selecciona una tarea")
+        }
+        DropdownMenu(
+            expanded = true,
+            onDismissRequest = { expanded = false }
+        ) {
+            options.forEach { option ->
+                DropdownMenuItem(
+                    text = { Text(text = option) },
+                    onClick = {
+                        Toast.makeText(context, option, Toast.LENGTH_SHORT).show()
+                    })
+            }
+        }
     }
 }
 
