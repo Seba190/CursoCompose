@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -55,6 +56,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -73,8 +75,26 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-             AnimarDpAsState()
+        AnimatedFloatAsState()
         }
+    }
+
+    @Composable
+    fun AnimatedFloatAsState(){
+        var isRotated by rememberSaveable {mutableStateOf(false) }
+        val rotationAngle by animateFloatAsState(targetValue = if(isRotated) 1080f else 0f,
+            animationSpec = tween(5500))
+        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
+            Image(painter = painterResource(id = R.drawable.img),contentDescription = "ventilador",modifier = Modifier
+                .padding(top = 50.dp)
+                .rotate(rotationAngle)
+                .size(150.dp))
+          Button(onClick = {isRotated = !isRotated}, modifier = Modifier.padding(top = 50.dp)
+              .width(200.dp)) {
+              Text(text = "Rotar Ventilador!")
+          }
+        }
+
     }
     @Composable
     fun ImagenCircular(imageSize: Dp){
