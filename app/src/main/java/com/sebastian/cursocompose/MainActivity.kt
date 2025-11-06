@@ -7,10 +7,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.Animatable
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateOffset
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
@@ -81,9 +86,24 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-         TransitionAnimation()
+            TransitionInfinite()
         }
     }
+
+@Composable
+fun TransitionInfinite(){
+    val infiniteTransition = rememberInfiniteTransition()
+    val heartSize by infiniteTransition.animateFloat(
+        initialValue = 100.0f,
+        targetValue = 250.0f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(800, delayMillis = 100, easing = FastOutLinearInEasing),
+            repeatMode = RepeatMode.Reverse
+        ))
+
+    Image(painter = painterResource(id = R.drawable.img_2), contentDescription = "corazon", modifier = Modifier.size(heartSize.dp))
+}
+
 @Composable
 fun TransitionAnimation(){
     var isAnimated by remember { mutableStateOf(false) }
