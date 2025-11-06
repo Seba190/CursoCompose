@@ -7,9 +7,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.Animatable
+import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateOffset
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -22,6 +25,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -55,8 +59,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -75,9 +81,37 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-        AnimatedFloatAsState()
+         TransitionAnimation()
         }
     }
+@Composable
+fun TransitionAnimation(){
+    var isAnimated by remember { mutableStateOf(false) }
+    val transition = updateTransition(targetState = isAnimated, label = "transition")
+
+    val rocketOffset by transition.animateOffset(transitionSpec = {if(this.targetState) tween(1000) else tween(1500)},
+        label = "rocket offset") { animated -> if (animated) Offset(200f, 0f) else Offset(200f, 500f) }
+
+    val rocketSize by transition.animateDp(transitionSpec = {tween(1000)},""){
+        animated -> if(animated) 50.dp else 250.dp
+
+    }
+    Column(modifier = Modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(id = R.drawable.img_1),
+            contentDescription = "rocket",
+            modifier = Modifier
+                .size(rocketSize)
+                .alpha(1.0f)
+                .offset(rocketOffset.x.dp, rocketOffset.y.dp)
+        )
+
+        Button(onClick = { isAnimated = !isAnimated }) {
+            Text(text = if (isAnimated) "Aterrizar" else "Despegar")
+        }
+    }
+
+}
 
     @Composable
     fun AnimatedFloatAsState(){
